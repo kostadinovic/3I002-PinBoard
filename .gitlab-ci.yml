@@ -1,0 +1,51 @@
+image: pobj
+
+stages:
+- test
+
+TME7 ClipRectTest:
+  script: ./scripts-ci/run.sh pobj.pinboard.document.test.ClipRectTest
+
+TME7 BoardTest:
+  script: ./scripts-ci/run.sh pobj.pinboard.document.test.BoardTest
+
+TME7 ClipEllipseTest:
+  script: ./scripts-ci/run.sh pobj.pinboard.document.test.ClipEllipseTest
+
+TME7 ToolRectTest:
+  script: ./scripts-ci/run.sh pobj.pinboard.editor.tools.test.ToolRectTest
+
+TME7 ToolEllipseTest:
+  script: ./scripts-ci/run.sh pobj.pinboard.editor.tools.test.ToolEllipseTest
+
+
+TME8 SelectionTest:
+  script: ./scripts-ci/run.sh pobj.pinboard.editor.test.SelectionTest
+
+TME8 ToolSelectionTest:
+  script: ./scripts-ci/run.sh pobj.pinboard.editor.tools.test.ToolSelectionTest
+
+TME8 ClipboardTest:
+  script: ./scripts-ci/run.sh pobj.pinboard.editor.test.ClipboardTest
+
+TME8 ClipboardListenerTest:
+  script: ./scripts-ci/run.sh pobj.pinboard.editor.test.ClipboardListenerTest
+
+
+TME9 ClipGroupTest:
+  script: ./scripts-ci/run.sh pobj.pinboard.document.test.ClipGroupTest
+
+TME9 CommandAddTest:
+  script: ./scripts-ci/run.sh pobj.pinboard.editor.commands.test.CommandAddTest
+
+TME9 CommandMoveTest:
+  script: ./scripts-ci/run.sh pobj.pinboard.editor.commands.test.CommandMoveTest
+
+TME9 CommandGroupTest:
+  script: ./scripts-ci/run.sh pobj.pinboard.editor.commands.test.CommandGroupTest
+
+TME9 CommandUngroupTest:
+  script: ./scripts-ci/run.sh pobj.pinboard.editor.commands.test.CommandUngroupTest
+
+TME9 CommandStackTest:
+  script: ./scripts-ci/run.sh pobj.pinboard.editor.test.CommandStackTest
