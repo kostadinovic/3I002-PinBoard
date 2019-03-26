@@ -24,6 +24,11 @@ public class ToolTest {
 		public CommandStack getUndoStack() { return stack; }
 
 		public Color getCurrentColor() { return Color.BLACK; }
+
+		@Override
+		public Color getColor() {
+			return Color.BLACK;
+		}
 	};
 	
 	MouseEvent makeMouseEvent(EventType<MouseEvent> eventType, double x, double y, boolean shift) {

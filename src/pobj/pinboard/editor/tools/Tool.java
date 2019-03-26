@@ -10,4 +10,5 @@ public interface Tool {
 	public void release(EditorInterface i, MouseEvent e);
 	public void drawFeedback(EditorInterface i, GraphicsContext gc);
 	public String getName(EditorInterface editor);
+	public String getName();
 }
