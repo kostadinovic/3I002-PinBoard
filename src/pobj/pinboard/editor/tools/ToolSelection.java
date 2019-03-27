@@ -30,11 +30,6 @@ public class ToolSelection implements Tool {
 
 	}
 
-	@Override
-	public String getName(EditorInterface editor) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public String getName() {

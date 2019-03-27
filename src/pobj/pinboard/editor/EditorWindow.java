@@ -20,6 +20,7 @@ import pobj.pinboard.document.Board;
 import pobj.pinboard.editor.tools.Tool;
 import pobj.pinboard.editor.tools.ToolEllipse;
 import pobj.pinboard.editor.tools.ToolRect;
+import pobj.pinboard.editor.tools.ToolSelection;
 
 public class EditorWindow implements EditorInterface{
 	
@@ -38,7 +39,7 @@ public class EditorWindow implements EditorInterface{
 		stage.setTitle("PinBoard");
 		
 		//Canvas = zone de dessin
-		canvas = new Canvas(1000,1000);
+		canvas = new Canvas(400,400);
 		
 		
 		//Menu Bar
@@ -54,9 +55,10 @@ public class EditorWindow implements EditorInterface{
 		Button bBox = new Button("Box");
 		Button bElip = new Button("Ellipse");
 		Button bImg = new Button("Img...");
+		Button bSel = new Button("Selection");
 		
 		//ToolBar
-		toolBar= new ToolBar(bBox, bElip, bImg);
+		toolBar= new ToolBar(bBox, bElip, bImg, bSel);
 		
 		//Separator = séparation entre canvas et statut
 		Separator separator = new Separator();
@@ -104,7 +106,7 @@ public class EditorWindow implements EditorInterface{
 		};
 		
 		
-		
+		//Selection 
 		selected = new Selection();
 		
 		

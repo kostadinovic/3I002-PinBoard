@@ -1,46 +1,49 @@
 package pobj.pinboard.editor.tools;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import pobj.pinboard.document.Clip;
 import pobj.pinboard.document.ClipRect;
 import pobj.pinboard.editor.EditorInterface;
 
 public class ToolRect implements Tool {
-	private Clip rect;
-
+	private double left,top,right,bottom;
+	private Color color=Color.RED;
+	
 	@Override
 	public void press(EditorInterface i, MouseEvent e) {
-		rect = new ClipRect(e.getX(), e.getY(), e.getX(), e.getY(), i.getColor());
-		
+		left=e.getX();
+		top=e.getY();
+		right=e.getX();
+		bottom=e.getY();
 	}
 
 	@Override
 	public void drag(EditorInterface i, MouseEvent e) {
-		rect.setGeometry(rect.getLeft(), rect.getTop(), e.getX(), e.getY());
-		
+		right=e.getX();
+		bottom=e.getY();
 	}
 
 	@Override
 	public void release(EditorInterface i, MouseEvent e) {
-		i.getBoard().addClip(rect);
+		List<Clip> list= new ArrayList<Clip>();
+		list.add(new ClipRect(left,top,right,bottom,color));
 	}
 
 	@Override
 	public void drawFeedback(EditorInterface i, GraphicsContext gc) {
-		gc.strokeRect(rect.getLeft(), rect.getTop(), ((ClipRect)rect).getWidth(), ((ClipRect)rect).getHeigth());
-		
-	}
-
-	@Override
-	public String getName(EditorInterface editor) {
-		return "Rectangle";
+		gc.setFill(Color.WHITE);
+		gc.fillRect(left, top, Math.abs(right-left), Math.abs(top-bottom));
+		gc.setStroke(color);
+		gc.strokeRect(left, top, Math.abs(right-left), Math.abs(top-bottom));
 	}
 
 	@Override
 	public String getName() {
-		return "Rectangle";
+		return "Rect tool";
 	}
-	
-
 }
