@@ -1,105 +1,76 @@
 package pobj.pinboard.editor;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import pobj.pinboard.document.Board;
 import pobj.pinboard.document.Clip;
+import pobj.pinboard.document.ClipRect;
 
 public class Selection {
+	private List<Clip> laSelection;
+	private ClipRect cr;
 	
-	private List<Clip> selected;
-	private List<Double> L = new ArrayList<Double>();
-	private List<Double> T = new ArrayList<Double>();
-	private List<Double> R = new ArrayList<Double>();
-	private List<Double> B = new ArrayList<Double>();
 	
-	public Selection () {
-		selected = new ArrayList<Clip>();
+	public Selection(){
+		laSelection = new ArrayList<>();
+		//cr = new ClipRect(0, 0, 0, 0, null);
 	}
 	
-	public void select (Board board, double x, double y ){
-			selected.clear();
-			L.clear();
-			T.clear();
-			R.clear();
-			B.clear();
-		
-		for (Clip elem : board.getContents()) {
-			if (elem.isSelected(x, y)) {
-				selected.add(elem);
-				
-				L.add(elem.getLeft());
-				T.add(elem.getTop());
-				R.add(elem.getRight());
-				B.add(elem.getBottom());
-				break;
-			}
+	public void select(Board board, double x, double y) {
+		clear();
+		List<Clip> elemsPlanche = board.getContents(); 
+		for(Clip c : elemsPlanche) {
+			if(c.isSelected(x, y)) laSelection.add(c);
 		}
-	}
-	
-	public void toogleSelect (Board board, double x, double y){
 		
-		for (Clip elem : board.getContents()) {
-			if (elem.isSelected(x, y)) {
-				if(selected.contains(elem)) {
-					selected.remove(elem);
-					
-					L.remove(elem.getLeft());
-					T.remove(elem.getTop());
-					R.remove(elem.getRight());
-					B.remove(elem.getBottom());
-				} else {					
-					selected.add(elem);
+	}
 
-					L.add(elem.getLeft());
-					T.add(elem.getTop());
-					R.add(elem.getRight());
-					B.add(elem.getBottom());
+	public void toogleSelect(Board board, double x, double y) {
+		List<Clip> elemsPlanche = board.getContents();
+		for (Clip c: elemsPlanche){
+			if(c.isSelected(x, y)){
+				if (!(laSelection.contains(c))){
+					laSelection.add(c);
+					break;
+				}else{
+					laSelection.remove(c);
+					break;
 				}
-				break;
 			}
 		}
 	}
 	
-	public void clear() { selected.clear(); }
-	
-	public List<Clip> getContents() { return selected ; }
-	
-	public void drawFeedback(GraphicsContext gc) {
-		
-		double minLeft = Collections.min(L);
-		double minTop = Collections.min(T);
-		double width = Collections.max(R) - minLeft;
-		double heigth = Collections.max(B) - minTop; 
-		
-		gc.strokeRect(minLeft, minTop, width, heigth);
+	public List<Clip> getContents(){
+		return laSelection;
+	}
+	public void clear() {
+		laSelection.clear();
 	}
 	
-	public double getRight() {
-		return Collections.max(R);
-	}
-	
-	public double getLeft() {
-		return Collections.min(L);
-	}
-	
-	public double getTop() {
-		return Collections.min(T);
-	}
-	
-	public double getBottom() {
-		return Collections.max(B);
-	}
-	
-	public double getWidth() {
-		return getRight() - getLeft();
-	}
-	
-	public double getHeight() {
-		return getBottom() - getTop();
-	}
-
+	 public void drawFeedback(GraphicsContext gc) {
+		 double left = 100000000;
+			double right = 0;
+			double top = 100000000;
+			double bottom = 0;
+			for (Clip c : laSelection){
+				if (c.getLeft()<left){
+					left = c.getLeft();
+				}
+				if (c.getRight()>right){
+					right = c.getRight();
+				}
+				if (c.getBottom()>bottom){
+					bottom = c.getBottom();
+				}
+				if (c.getTop()<top){
+					top = c.getTop();
+				}
+			}
+			cr = new ClipRect(left, top, right, bottom, null);
+			gc.setStroke(Color.BLUE);
+			gc.strokeRect(cr.getLeft(), cr.getTop(), cr.getRight() - cr.getLeft(), cr.getBottom() - cr.getTop());
+	 }
 }

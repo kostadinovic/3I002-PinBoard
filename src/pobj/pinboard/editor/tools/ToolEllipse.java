@@ -1,53 +1,74 @@
 package pobj.pinboard.editor.tools;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
 import javafx.scene.canvas.GraphicsContext;
+import pobj.pinboard.document.Board;
+import pobj.pinboard.document.ClipEllipse;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import pobj.pinboard.document.Clip;
-import pobj.pinboard.document.ClipEllipse;
+
 import pobj.pinboard.editor.EditorInterface;
 
 public class ToolEllipse implements Tool{
-	private double left, top, right, bottom;
-	private Color color= Color.BLUE;
-
+	private Color color;
+	private double xPress, yPress, xRelease, yRelease;
+	
+	
+	public ToolEllipse() {
+		color = color.RED;
+		xPress = 0;
+		yPress = 0;
+		xRelease = 0;
+		yRelease = 0;
+	}
+	
 	@Override
 	public void press(EditorInterface i, MouseEvent e) {
-		left=e.getX();
-		top=e.getY();
-		right=e.getX();
-		bottom=e.getY();
+		xPress = e.getX();
+		yPress = e.getY();
+		
 	}
 
 	@Override
 	public void drag(EditorInterface i, MouseEvent e) {
-		right=e.getX();
-		bottom=e.getY();
+		xRelease = e.getX();
+		yRelease = e.getY();	
 	}
 
 	@Override
 	public void release(EditorInterface i, MouseEvent e) {
-		List<Clip> list= new ArrayList<Clip>();
-		list.add(new ClipEllipse(left,top,right,bottom,color));
+		Board planche = i.getBoard();
+		planche.addClip(new ClipEllipse(left(),top(),right(),bottom(),color));	
 	}
 
 	@Override
 	public void drawFeedback(EditorInterface i, GraphicsContext gc) {
-		gc.setFill(Color.BLUE);
-		gc.fillOval(((left+right)/2) - ((right-left)/2), ((top+bottom)/2) - ((bottom-top)/2),
-				(right-left), (bottom-top));
 		gc.setStroke(color);
-		gc.strokeOval( ((left+right)/2) - ((right-left)/2), ((top+bottom)/2) - ((bottom-top)/2),
-				(right-left), (bottom-top));
+		gc.strokeOval(left(), top(), right()-left(), bottom()-top());
+	}
+	
+	private double left() {
+		return Math.min(xPress, xRelease);
+	}
+
+	private double top() {
+		return Math.min(yPress,yRelease);
+	}
+
+	private double right() {
+		return Math.max(xRelease, xPress);
+	}
+
+	private double bottom() {
+		return Math.max(yRelease, yPress);
+	}
+
+	public void setCouleur(Color couleur) {
+		this.color = couleur;
 	}
 
 	@Override
-	public String getName() {
-		return "Ellipse tool";
+	public String getName(EditorInterface editor) {
+		return "Ellipse Tools";
 	}
 
 }

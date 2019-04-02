@@ -5,6 +5,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -29,9 +30,8 @@ public class EditorWindow implements EditorInterface{
 	private ToolBar toolBar;
 	private Canvas canvas;
 	private Label statut;
-	private Tool tool;
 	private Color color = Color.BLACK;
-	private Selection selected;
+	private Tool tool = new ToolRect();
 	
 	public EditorWindow(final Stage stage) {
 		board = new Board();
@@ -55,16 +55,16 @@ public class EditorWindow implements EditorInterface{
 		Button bBox = new Button("Box");
 		Button bElip = new Button("Ellipse");
 		Button bImg = new Button("Img...");
-		Button bSel = new Button("Selection");
+		Button bSelect = new Button("Selection");
 		
 		//ToolBar
-		toolBar= new ToolBar(bBox, bElip, bImg, bSel);
+		toolBar= new ToolBar(bBox, bElip, bImg, bSelect);
 		
 		//Separator = séparation entre canvas et statut
 		Separator separator = new Separator();
 		
 		//Barre de statut = un label apres le separator
-		Label statut = new Label("Filled rectangle tool");
+		Label label = new Label("Filled rectangle tool");
 		
 		//VBox
 		VBox vBox = new VBox();
@@ -84,30 +84,16 @@ public class EditorWindow implements EditorInterface{
 		newFile.setOnAction(e -> { new EditorWindow(new Stage()); } );
 		closeFile.setOnAction(e -> { stage.close(); } );
 		
-		//Tool
-		tool = new ToolRect();
+		//Tools dans MenuBar
+		Menu tools = new Menu("Tools");
+		MenuItem rectangle = new MenuItem("Rectangle");
+		MenuItem ellipse = new MenuItem("Ellipse");
+		tools.getItems().addAll(rectangle, ellipse);
+		menuBar.getMenus().add(tools);
 		
-		final EventHandler<ActionEvent> boxHandler = new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				tool = new ToolRect();
-				statut.setText("Filled "+ tool.getName() +" tool");
-				
-			}
-		};
+		//Comportement des TOOLS
+
 		
-		final EventHandler<ActionEvent> EllipseHandler = new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				tool = new ToolEllipse();
-				statut.setText("Filled "+ tool.getName() + " tool");
-				
-			}
-		};
-		
-		
-		//Selection 
-		selected = new Selection();
 		
 		
 		
@@ -116,41 +102,6 @@ public class EditorWindow implements EditorInterface{
 		
 	}
 	
-	public void press(final EditorInterface ei) {
-		canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent e) {
-				tool.press(ei, e);
-				
-			}
-			
-		});
-	}
-	
-	public void drag(final EditorInterface ei) {
-		canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent e) {
-				tool.drag(ei, e);
-				draw();
-			}
-			
-		});
-	}
-	
-	public void release(final EditorInterface ei) {
-		canvas.setOnMouseReleased(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent e) {
-				tool.release(ei, e);
-				board.draw(canvas.getGraphicsContext2D());
-				if (tool instanceof ToolSelection) {
-					tool.drawFeedback(ei, canvas.getGraphicsContext2D());
-				}
-			}
-			
-		});
-	}
 
 	@Override
 	public Board getBoard() {
@@ -159,7 +110,7 @@ public class EditorWindow implements EditorInterface{
 
 	@Override
 	public Selection getSelection() {
-		return selected;
+		return null;
 	}
 
 	@Override
@@ -173,9 +124,21 @@ public class EditorWindow implements EditorInterface{
 		return color;
 	}
 	
-	public void draw() {
-		board.draw(canvas.getGraphicsContext2D());
-		tool.drawFeedback(this, canvas.getGraphicsContext2D());
+	public void press(EditorInterface i, MouseEvent e) {
+		tool.press(i, e);
+	}
+	
+	public void drag(EditorInterface i, MouseEvent e) {
+		tool.drag(i, e);
+	}
+	
+	public void release(EditorInterface i, MouseEvent e) {
+		tool.release(this, e);
+	}
+	
+	public void draw(GraphicsContext gc) {
+		board.draw(gc);
+		tool.drawFeedback(this, gc);
 	}
 	
 	
