@@ -1,8 +1,5 @@
 package pobj.pinboard.editor;
 
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -19,9 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import pobj.pinboard.document.Board;
 import pobj.pinboard.editor.tools.Tool;
-import pobj.pinboard.editor.tools.ToolEllipse;
 import pobj.pinboard.editor.tools.ToolRect;
-import pobj.pinboard.editor.tools.ToolSelection;
 
 public class EditorWindow implements EditorInterface{
 	
@@ -49,7 +44,6 @@ public class EditorWindow implements EditorInterface{
 		Menu menuTools = new Menu("Tools");
 		menuBar.getMenus().add(menuFile);
 		menuBar.getMenus().add(menuEdit);
-		menuBar.getMenus().add(menuTools);
 		
 		//Button of ToolBar
 		Button bBox = new Button("Box");
@@ -68,7 +62,7 @@ public class EditorWindow implements EditorInterface{
 		
 		//VBox
 		VBox vBox = new VBox();
-		vBox.getChildren().addAll(menuBar, toolBar,canvas, separator, statut);
+		vBox.getChildren().addAll(menuBar, toolBar,canvas, separator, label);
 	
 		
 		Scene scene = new Scene(vBox);
@@ -89,7 +83,7 @@ public class EditorWindow implements EditorInterface{
 		MenuItem rectangle = new MenuItem("Rectangle");
 		MenuItem ellipse = new MenuItem("Ellipse");
 		tools.getItems().addAll(rectangle, ellipse);
-		menuBar.getMenus().add(tools);
+		menuBar.getMenus().add(tools); 
 		
 		//Comportement des TOOLS
 
